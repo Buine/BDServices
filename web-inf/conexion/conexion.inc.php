@@ -10,7 +10,7 @@ class conexion{
 			$this->user = "postgres";
 			$this->password = "12345";
 			$this->conn = new PDO(
-				'pgsql:host=localhost;dbname=hospital;port=5432',
+				'pgsql:host=localhost;dbname=libreria;port=5432',
 				$this->user,
 				$this->password
 			);

@@ -1,6 +1,6 @@
 <?php
 
-class pacienteREST {
+class libroREST {
     function __construct() {
         $this->REST();
     }
@@ -10,7 +10,7 @@ class pacienteREST {
         header("Access-Control-Allow-Origin: *");
         header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE");
         $metodo = $_SERVER['REQUEST_METHOD'];
-        $dao = new pacienteDAO();  
+        $dao = new libroDAO();  
         switch ($metodo) {
             case 'GET':
                 $rs = $dao->listar($_GET);

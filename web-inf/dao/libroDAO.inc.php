@@ -1,5 +1,5 @@
 <?php
-class pacienteDAO{
+class libroDAO{
 	private $conexion;
 	function __construct(){
 		$this->conexion = new conexion();
@@ -12,9 +12,10 @@ class pacienteDAO{
 			if(array_key_exists("valor", $request)){
 				$paramater = array("%".$request['valor']."%");
 			}
-			$query = "SELECT * ".
-				     "FROM paciente ".
-					 "WHERE lower(paciente_nombre) like lower(?)";
+			$query = "SELECT l.*, g.* ".
+				     "FROM libro as l, generoxlibro as gxl, genero as g ".
+					 "WHERE lower(libro_titulo) like lower(?) ".
+				     "      AND l.libro_cod = gxl.libro_cod AND gxl.genero_cod = g.genero_cod";
 			$p = $this->conexion->getConexion()->prepare($query);
 			$p->execute($paramater);
 			$rs = $p->fetchALL(PDO::FETCH_OBJ);
