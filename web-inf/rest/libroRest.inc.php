@@ -40,6 +40,10 @@ class libroREST {
                     );
                 break;
         }
-        echo json_encode($rs);
+        echo json_encode($rs, JSON_UNESCAPED_UNICODE);
+		/*
+		json_encode($data, JSON_UNESCAPED_UNICODE)
+		json_decode($json, false, 512, JSON_UNESCAPED_UNICODE)
+		*/
     }
 }
