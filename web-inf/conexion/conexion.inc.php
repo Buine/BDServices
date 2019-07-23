@@ -7,10 +7,10 @@ class conexion{
 	
 	function __construct(){
 		try{
-			$this->user = "postgres";
-			$this->password = "12345";
+			$this->user = "root";
+			$this->password = "123";
 			$this->conn = new PDO(
-				'pgsql:host=localhost;dbname=libreria;port=5432',
+				'mysql:host=localhost;dbname=libreria;port=3306',
 				$this->user,
 				$this->password
 			);

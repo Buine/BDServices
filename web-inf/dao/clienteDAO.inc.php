@@ -8,15 +8,16 @@ class clienteDAO{
 	
 	function agregar($request){
 		try{
+			print_r($request);
 			$paramaters = array(
 				$request->doc, 
-				$request->nombre, 
 				$request->apellido, 
+				$request->nombre, 
 				$request->genero, 
 				$request->fecha_nac,
-				$request->rh,
 				$request->departamento,
-				$request->municipio
+				$request->municipio,
+				$request->rh
 			);
 			
 			$query = "INSERT INTO cliente VALUES( ?, ?, ?, ?, ?, ?, ?, ? )";
@@ -24,7 +25,7 @@ class clienteDAO{
 			$p = $this->conexion->getConexion()->prepare($query);
 			$p->execute($paramaters);
 			
-			if ($ps->rowCount() > 0)
+			if ($p->rowCount() == 0)
                 $rs = array(
                     "DAO" => "Cliente",
                     "Mensaje" => "Cliente registrado"
@@ -50,9 +51,12 @@ class clienteDAO{
 				$parameters = array("%".$request['nombre']."%");
 			}
 			
+			$t = $this->conexion->getConexion()->prepare("SET NAMES 'utf8';");
+			$t->execute();
 			$p = $this->conexion->getConexion()->prepare($query);
 			$p->execute($parameters);
 			$rs = $p->fetchALL(PDO::FETCH_OBJ);
+
 		} catch (PDOException $ex) {
 			$rs = array(
 				"Error" => "Listar Clientes",
