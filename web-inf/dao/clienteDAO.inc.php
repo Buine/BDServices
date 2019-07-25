@@ -6,9 +6,37 @@ class clienteDAO{
 		$this->conexion->getConexion()->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	}
 	
+	function actualizar($request){
+		try{
+			$paramaters = array(
+				$request->departamento,
+				$request->municipio,
+				$request->doc
+			);
+			
+			$query = "UPDATE cliente SET dep_id = ?, mun_id = ? "
+			."WHERE cliente_doc = ?";
+			
+			$p = $this->conexion->getConexion()->prepare($query);
+			$p->execute($paramaters);
+			
+			if ($p->rowCount() >= 0)
+                $rs = array(
+                    "DAO" => "Cliente",
+                    "Mensaje" => "Cliente actualizado"
+                );
+			
+		} catch (PDOException $ex){
+			$rs = array(
+				"Error" => "Editar Cliente",
+				"Detalles" => $ex->getMessage()
+			);
+		}
+		return $rs;
+	}
+	
 	function agregar($request){
 		try{
-			print_r($request);
 			$paramaters = array(
 				$request->doc, 
 				$request->apellido, 
@@ -25,7 +53,7 @@ class clienteDAO{
 			$p = $this->conexion->getConexion()->prepare($query);
 			$p->execute($paramaters);
 			
-			if ($p->rowCount() == 0)
+			if ($p->rowCount() >= 0)
                 $rs = array(
                     "DAO" => "Cliente",
                     "Mensaje" => "Cliente registrado"
@@ -37,6 +65,7 @@ class clienteDAO{
 				"Detalles" => $ex->getMessage()
 			);
 		}
+		return $rs;
 	}
 	
 	function listar($request){
@@ -49,6 +78,11 @@ class clienteDAO{
 				
 			if(array_key_exists('nombre', $request)){
 				$parameters = array("%".$request['nombre']."%");
+			}
+			
+			if(array_key_exists('doc', $request)){
+				array_push($parameters, $request['doc']);
+				$query = $query."AND cliente_doc = ? ";
 			}
 			
 			$t = $this->conexion->getConexion()->prepare("SET NAMES 'utf8';");
