@@ -29,6 +29,15 @@ class municipioDAO{
 				$query = $query." AND lower(m.dep_id) = ?";
 			}
 			
+			if(array_key_exists("municipio", $request)){
+				if($parameters != NULL){
+					array_push($parameters, $request['municipio']);
+				}else{
+					$parameters = array($request['municipio']);
+				}
+				$query = $query." AND lower(m.mun_nombre) LIKE lower(?)";
+			}
+			
 			if(array_key_exists("municipio_id", $request)){
 				if($parameters != NULL){
 					array_push($parameters, $request['municipio_id']);

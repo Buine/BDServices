@@ -72,9 +72,10 @@ class clienteDAO{
 		try{
 			$parameters = array("%");
 			
-			$query = "SELECT * ".
-				     "FROM cliente ".
-					 "WHERE lower(cliente_nombre) LIKE lower(?) ";
+			$query = "SELECT c.cliente_doc, c.cliente_nombre, c.cliente_apellido, c.cliente_genero, c.cliente_fecha_nac , cliente_rh ,d.dep_nombre, m. mun_nombre ".
+				     "FROM cliente as c, municipio as m, departamento as d ".
+					 "WHERE c.mun_id = m.mun_id AND c.dep_id = m.dep_id AND m.dep_id = d.dep_id ".
+					 "AND lower(c.cliente_nombre) LIKE lower(?) ";
 				
 			if(array_key_exists('nombre', $request)){
 				$parameters = array("%".$request['nombre']."%");
