@@ -75,7 +75,7 @@ class clienteDAO{
 			$query = "SELECT c.cliente_doc, c.cliente_nombre, c.cliente_apellido, c.cliente_genero, c.cliente_fecha_nac , cliente_rh ,d.dep_nombre, m. mun_nombre ".
 				     "FROM cliente as c, municipio as m, departamento as d ".
 					 "WHERE c.mun_id = m.mun_id AND c.dep_id = m.dep_id AND m.dep_id = d.dep_id ".
-					 "AND lower(c.cliente_nombre) LIKE lower(?) ";
+					 "AND lower(c.cliente_nombre) LIKE lower(?)";
 				
 			if(array_key_exists('nombre', $request)){
 				$parameters = array("%".$request['nombre']."%");
@@ -83,7 +83,22 @@ class clienteDAO{
 			
 			if(array_key_exists('doc', $request)){
 				array_push($parameters, $request['doc']);
-				$query = $query."AND cliente_doc = ? ";
+				$query = $query." AND c.cliente_doc = ? ";
+			}
+			
+			if(array_key_exists('apellido', $request)){
+				array_push($parameters, "%".$request['apellido']."%");
+				$query = $query." AND lower(c.cliente_apellido) LIKE lower(?) ";
+			}
+			
+			if(array_key_exists('departamento', $request)){
+				array_push($parameters, "%".$request['departamento']."%");
+				$query = $query." AND lower(d.dep_nombre) LIKE lower(?) ";
+			}
+			
+			if(array_key_exists('municipio', $request)){
+				array_push($parameters, "%".$request['municipio']);
+				$query = $query." AND lower(m.mun_nombre) LIKE lower(?) ";
 			}
 			
 			$t = $this->conexion->getConexion()->prepare("SET NAMES 'utf8';");
