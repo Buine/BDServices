@@ -22,10 +22,7 @@ class clienteREST {
                 $rs = $dao->actualizar(json_decode(file_get_contents("php://input")));
                 break;
             case 'DELETE':
-                $rs = array(
-                    "Metodo" => $metodo,
-                    "Mensaje" => "En construccion borrar..."
-                    );
+				$rs = $dao->eliminar($_GET);
                 break;
             default:
                 $rs = array(

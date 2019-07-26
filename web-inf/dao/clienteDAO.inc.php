@@ -6,6 +6,34 @@ class clienteDAO{
 		$this->conexion->getConexion()->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	}
 	
+	function eliminar($request){
+		try{
+			$paramaters = array($request['doc']);
+			
+			$query = "DELETE FROM cliente WHERE cliente_doc = ?";
+			
+			$p = $this->conexion->getConexion()->prepare($query);
+			$p->execute($paramaters);
+			if ($p->rowCount() > 0)
+                $rs = array(
+                    "DAO" => "Cliente",
+                    "Mensaje" => "Cliente eliminado"
+                );
+			else
+                $rs = array(
+                    "DAO" => "Cliente",
+                    "Mensaje" => "Cliente no existe"
+                );
+			
+		} catch(PDOException $ex){
+			$rs = array(
+				"Error" => "Eliminar Cliente",
+				"Detalles" => $ex->getMessage()
+			);
+		}
+		return $rs;
+	}
+	
 	function actualizar($request){
 		try{
 			$paramaters = array(
