@@ -17,19 +17,35 @@ class libroDAO{
 				                 "gxl.genero_cod = g.genero_cod  AND ".
 				                 "l.editorial_cod = e.editorial_cod AND ".
 				                 "a.autor_id = l.autor_id ".
-				           "GROUP BY l.libro_cod, a.autor_id, e.editorial_cod) as x;";
+				           "GROUP BY l.libro_cod, a.autor_id, e.editorial_cod) as x ";
 
 			if(array_key_exists("titulo", $request)){
-				$paramaters = array("%".$request['titulo']."%"); // Busqueda por titulo
+				$parameters = array("%".$request['titulo']."%"); // Busqueda por titulo
 			}
 			
 			if(array_key_exists("genero", $request)){
-				array_push($paramaters, "%".$request['genero']."%"); 
+				array_push($parameters, "%".$request['genero']."%"); 
 				$query = $query."WHERE lower(x.generos) like lower(?)"; // Busqueda por genero
+			}
+			
+			if(array_key_exists("autor", $request)){
+				array_push($parameters, "%".$request['autor']."%"); 
+				$query = $query."WHERE lower(x.autor_nombre) like lower(?)"; // Busqueda por autor
+			}
+			
+			if(array_key_exists("editorial", $request)){
+				array_push($parameters, "%".$request['editorial']."%"); 
+				$query = $query."WHERE lower(x.editorial_nombre) like lower(?)"; // Busqueda por editorial
+			}
+			
+			if(array_key_exists("id", $request)){
+				array_push($parameters, "%".$request['id']."%"); 
+				$query = $query."WHERE lower(x.libro_cod) like ?"; // Busqueda por id
 			}
 			
 			$t = $this->conexion->getConexion()->prepare("SET NAMES 'utf8';");
 			$t->execute();
+			
 			$p = $this->conexion->getConexion()->prepare($query);
 			$p->execute($parameters);
 			$rs = $p->fetchALL(PDO::FETCH_OBJ);
