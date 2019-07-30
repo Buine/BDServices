@@ -1,0 +1,187 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+	<meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="../css/jquery.mobile-1.4.5.css">
+        <script type="text/javascript" src="../js/jquery-2.1.4.min.js"></script>
+        <script type="text/javascript" src="../js/jquery.mobile-1.4.5.min.js"></script>
+	<script type="text/javascript" src="../js/prestamos.js"></script>
+	<script type="text/javascript" src="../js/libro.js"></script>
+	<script type="text/javascript" src="../js/cliente.js"></script>
+	<script type="text/javascript" src="../js/autor.js"></script>
+	<script type="text/javascript" src="../js/actions.js"></script>
+	<script src="../dist/jquery.scroltable.min.js"></script>
+	<link href="../dist/jquery.scroltable.min.css" rel="stylesheet" type="text/css">
+        <script language="JavaScript">
+            $(document).ready(function ()
+            {
+				document.getElementById("generate-prestamo").style.display = "none";
+				document.getElementById("prestamo-info").style.display = "none";
+				document.getElementById("prestamos-lista").style.display = "none";
+				listarClientes('none','none');
+				autorListar('none', 'none');
+				$('table').scroltable();
+            });
+        </script>   
+<title>BDServices</title>
+</head>
+
+<body>
+	<!-- Header -->
+	<div data-role="header" data-theme="b" role="banner" class="ui-header ui-bar-b">
+		<h1 class="ui-title" role="heading" aria-level="1">DBService</h1>
+		<a href="#left-panel" data-icon="carat-r" data-iconpos="notext" data-shadow="false" data-iconshadow="false" class="ui-nodisc-icon ui-link ui-btn-left ui-btn ui-icon-carat-r ui-btn-icon-notext ui-corner-all" data-role="button" role="button">Options</a>
+	</div>
+	
+	<!-- Main -->
+	<div role="main" class="ui-content">
+		
+		<!-- Info cliente -->
+		<div id="prestamo-info" class="ui-panel-inner">
+			<h3 id="name-info" style="text-align: left; margin: 0px">Cliente: </h3>
+			<h3 id="doc-info" style="text-align: left; margin-top: 0px">Documento: </h3>	
+		</div>
+		
+		<!-- Buscar un cliente-->
+		<div id="search-page">
+			<h1 style="text-align: center">Busqueda de clientes</h1>
+			<div class="ui-grid-b">
+				
+					<input id="cliente_buscar" name="cliente_buscar" placeholder="Select a filter and search" type="search"/>
+					<select name="select-choice-0" id="filter-search">
+						<option value="doc">Documento</option>
+						<option value="nombre">Nombre</option>
+						<option value="apellido">Apellido</option>
+						<option value="departamento">Departamento</option>
+						<option value="municipio">Municipio</option>
+					</select>
+					
+				<div class="ui-block-a" style="height: 100%;text-align: center">
+
+				</div>
+				<div class="ui-block-b" style="height: 100%;text-align: center">
+					<a href="javascript:listarClientes('','')" name="boton" class="ui-btn ui-btn-inline ui-icon-search ui-corner-all ui-btn-icon-left ui-shadow">
+						Buscar
+					</a>
+				</div>
+				<div class="ui-block-c" style="height: 100%;text-align: center">
+					                       
+				</div>                 
+			</div>  
+			
+			<!-- Tabla -->
+			<table border="0" id="listaClientes" data-role="table" class="ui-responsive ui-shadow ui-table" data-mode="column">
+				<thead>
+					<tr>
+						<th data-colstart="1">Documento</th>
+						<th data-colstart="2">Nombre</th>
+						<th data-colstart="3">Apellido</th>
+						<th data-colstart="4">Genero</th>
+						<th data-colstart="3">Fecha de Nacimiento</th>
+						<th data-colstart="5">RH</th>
+						<th data-colstart="6">Departamento</th>
+						<th data-colstart="7">Municipio</th>
+						<th data-colstart="8">Acciones</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr><td colspan="5" align="center">Sin información</td></tr>
+				</tbody>
+			</table>
+		</div>
+		
+		<!-- Generar un prestamo -->
+		<div id="generate-prestamo">
+			<h1 style="text-align: center">Generar un prestamo de libro</h1>
+			<p id="info2" style="text-align: center"></p>
+			<div id="generate-contenido" style="display: none">
+				<form>
+					<div id="libro-prestamo" class="ui-input-btn ui-btn ui-icon-delete ui-btn-icon-right" style="display: none">
+						<p id="data-libro"></p>
+						<input id="id-libro" type="button" data-enhanced="true" value="" onClick="unselect()">
+					</div>
+
+					<label for="textinput-fc">Fecha de Prestamo</label>
+					<input type="date" name="fecha-prestamo" id="fecha-prestamo" value="" required>
+					<label for="textinput-fc">Fecha de Entrega</label>
+					<input type="date" name="fecha-entrega" id="fecha-entrega" value="" required>
+					<!-- <label for="textinput-fc">Cantidad</label>
+					<input type="number" name="cantidad" id="cantidad" value=""> -->
+					<button id="prestamo" class="ui-btn ui-btn-b" style="display: none; margin-top: 30px;">Realizar prestamo</button>
+				</form>
+
+				<div id="select-libro">
+					<div class="ui-grid-b">
+							<h4>Selecciona un libro</h4>
+							<select name="prestamo-filter" id="prestamo-filter" onChange="libroBuscar('autor', '')">
+								<option value="default">Elige un autor</option>
+							</select>
+					</div>
+					<!-- Tabla -->
+					<input id="libro_buscar" name="libro_buscar" placeholder="Search" type="search"/>
+					<table border="0" id="listaLibros" data-role="table" class="ui-responsive ui-shadow ui-table" data-mode="column" data-filter="true" data-input="#libro_buscar">
+						<thead>
+							<tr>
+								<th data-colstart="1">ID</th>
+								<th data-colstart="2">Titulo</th>
+								<th data-colstart="3">Autor</th>
+								<th data-colstart="4">Generos</th>
+								<th data-colstart="3">Editorial</th>
+								<th data-colstart="5"># de Paginas</th>
+								<th data-colstart="6">Idioma</th>
+								<th data-colstart="7">Fecha de publicación</th>
+								<th data-colstart="7">Acción</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr><td colspan="5" align="center">Sin información</td></tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+			
+		<!-- Listar prestamos de un cliente -->
+		<div id="prestamos-lista">
+			<h1 style="text-align: center">Prestamos</h1>
+			<p id="info1" style="text-align: center"></p>
+			
+			<div id="prestamo-contenido" style="display: none">
+				<input id="prestamo_buscar" name="prestamo_buscar" placeholder="Search" type="search"/>
+					<table border="0" id="listaPrestamos" data-role="table" class="ui-responsive ui-shadow ui-table" data-mode="column" data-filter="true" data-input="#prestamo_buscar">
+						<thead>
+							<tr>
+								<th data-colstart="1">ID</th>
+								<th data-colstart="2">Titulo</th>
+								<th data-colstart="3">Autor</th>
+								<th data-colstart="4">Fecha de prestamo</th>
+								<th data-colstart="5">Fecha de regreso</th>
+								<th data-colstart="6">Estado</th>
+								<th data-colstart="7">Acciones</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr><td colspan="5" align="center">Sin información</td></tr>
+						</tbody>
+					</table>
+			</div>
+			
+		</div>
+		
+	</div>
+	
+	<!-- Panel izquierdo -->
+	<div data-role="panel" id="left-panel" data-theme="b" class="ui-panel ui-panel-position-left ui-panel-display-reveal ui-body-b ui-panel-animate ui-panel-open">
+		
+    	<div class="ui-panel-inner">
+			<a href="#left-panel" class="ui-btn ui-corner-all" onClick="initSearchClient()">Buscar un cliente</a>
+			<a href="#left-panel" class="ui-btn ui-corner-all" onClick="initgeneratePrestamo()">Generar un prestamo</a>
+			<a href="#left-panel" class="ui-btn ui-corner-all" onClick="initPrestamos()">Prestamos</a>
+		</div>
+		
+
+    </div>
+</body>
+</html>

@@ -25,5 +25,17 @@ if(array_key_exists("recurso", $_GET)){
             require_once 'web-inf/rest/municipioRest.inc.php';
 			$rest = new municipioREST();
 			break;
+		case 'autor':
+			require_once './web-inf/conexion/conexion.inc.php';
+            require_once 'web-inf/dao/autorDAO.inc.php';
+            require_once 'web-inf/rest/autorRest.inc.php';
+			$rest = new autorREST();
+			break;
+		case 'prestamo':
+			require_once './web-inf/conexion/conexion.inc.php';
+            require_once 'web-inf/dao/prestamoDAO.inc.php';
+            require_once 'web-inf/rest/prestamoRest.inc.php';
+			$rest = new prestamoREST();
+			break;
     }
 }
