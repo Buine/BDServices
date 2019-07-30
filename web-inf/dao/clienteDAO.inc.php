@@ -81,7 +81,7 @@ class clienteDAO{
 			$p = $this->conexion->getConexion()->prepare($query);
 			$p->execute($paramaters);
 			
-			if ($p->rowCount() >= 0)
+			if ($p->rowCount() > 0)
                 $rs = array(
                     "DAO" => "Cliente",
                     "Mensaje" => "Cliente registrado"

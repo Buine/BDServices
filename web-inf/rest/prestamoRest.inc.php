@@ -16,10 +16,7 @@ class prestamoREST {
                 $rs = $dao->listar($_GET);
                 break;
             case 'POST':
-                $rs = array(
-                    "Metodo" => $metodo,
-                    "Mensaje" => "En construccion agregar..."
-                    );
+                $rs = $dao->agregar(json_decode(file_get_contents("php://input")));
                 break;
             case 'PUT':
                 $rs = array(

@@ -7,6 +7,36 @@ class prestamoDAO{
 		$this->conexion->getConexion()->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	}
 	
+	function agregar($request){
+		try{
+			$paramaters = array(
+				$request->doc, 
+				$request->libro,
+				$request->fec_prestamo,
+				$request->fec_regreso
+			);
+
+			$query = "INSERT INTO prestamo(cliente_doc, libro_cod, prestamo_fecha_sal, prestamo_fecha_reg) VALUES( ?, ?, ?, ? )";
+
+			$p = $this->conexion->getConexion()->prepare($query);
+			$p->execute($paramaters);
+
+			if ($p->rowCount() > 0)
+				$rs = array(
+					"DAO" => "Prestamo",
+					"Mensaje" => "Prestamo registrado"
+				);
+
+		} catch (PDOException $ex){
+			$rs = array(
+				"Error" => "Crear Prestamo",
+				"Mensaje" => $ex->getMessage()
+			);
+		}
+		return $rs;
+	}
+	
+	
 	function listar($request){
 		try{
 			$parameters = array(NULL);
