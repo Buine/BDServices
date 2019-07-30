@@ -1,4 +1,4 @@
-var URL4 = "http://localhost/BD/prestamo";
+var URL4 = "http://192.168.1.9/BD/prestamo";
 
 function prestamoListar(){
 	var s = (document.getElementById("doc-info").innerText).split(": ")[1];
@@ -29,7 +29,7 @@ function listarInfoP(data){
 			row.append("<td>" + data[i].prestamo_fecha_sal + "</td>");
 			row.append("<td>" + data[i].prestamo_fecha_reg + "</td>");
 			row.append("<td>" + (data[i].prestamo_estado == 'E' ? "Entregado" : "Pendiente") + "</td>");
-			row.append(`<td><a>Recibir</a></td>`);
+			row.append(`<td><a>Recibir</a><a>Eliminar</a></td>`);
             row.append("</tr>");
             $('#listaPrestamos').append(row);
 		});
@@ -58,6 +58,7 @@ function generarPrestamo(){
 			var fecha2 = document.getElementById('fecha-entrega').value;
 			var jsond = '{"doc": "'+doc+'", "libro": "'+libro+'", "fec_prestamo": "'+fecha1+'", "fec_regreso": "'+fecha2+'"}';
 			console.log(jsond);
+			document.getElementById("prestamo").disabled = true;
 			$.ajax({
 				url:URL4,
 				type: "POST",
@@ -67,12 +68,12 @@ function generarPrestamo(){
 			}).done(function(data){
 				alert(data.Mensaje);
 				console.log(data);
-				//location.reload();
 				defaultScreen();
 			}).fail(function(jqXHR, textStatus, errorThrown){
 				console.log("Error al crear el prestamo");
 				console.log(errorThrown);
 			}).always(function(){
+				document.getElementById("prestamo").disabled = false;
 			});
 		} else {
 			alert("Las fecha son invalidas. Verifique las fechas");

@@ -1,4 +1,4 @@
-var URL3 = "http://localhost/BD/autor";
+var URL3 = "http://192.168.1.9/BD/autor";
 
 function autorListar(filter, search){
 	var f = filter;

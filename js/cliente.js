@@ -1,4 +1,4 @@
-var URL = "http://localhost/BD/cliente";
+var URL = "http://192.168.1.9/BD/cliente";
 
 function listarClientes(filter, search){
 	var f, s;

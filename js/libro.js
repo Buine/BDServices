@@ -1,4 +1,4 @@
-var URL2 = "http://localhost/BD/libro";
+var URL2 = "http://192.168.1.9/BD/libro";
 
 function libroBuscar(filter, search){
 	var f, s;
