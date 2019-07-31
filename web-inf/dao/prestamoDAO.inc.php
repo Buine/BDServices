@@ -7,6 +7,32 @@ class prestamoDAO{
 		$this->conexion->getConexion()->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	}
 	
+	function editar($request){
+		try{
+			$paramaters = array(
+				$request->id
+			);
+
+			$query = "UPDATE prestamo SET prestamo_estado = 'E' WHERE prestamo_cod = ?";
+
+			$p = $this->conexion->getConexion()->prepare($query);
+			$p->execute($paramaters);
+
+			if ($p->rowCount() > 0)
+				$rs = array(
+					"DAO" => "Prestamo",
+					"Mensaje" => "Prestamo recibido"
+				);
+
+		} catch (PDOException $ex){
+			$rs = array(
+				"Error" => "Recibir Prestamo",
+				"Mensaje" => $ex->getMessage()
+			);
+		}
+		return $rs;
+	}
+	
 	function agregar($request){
 		try{
 			$paramaters = array(

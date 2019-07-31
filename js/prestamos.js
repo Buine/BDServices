@@ -29,7 +29,7 @@ function listarInfoP(data){
 			row.append("<td>" + data[i].prestamo_fecha_sal + "</td>");
 			row.append("<td>" + data[i].prestamo_fecha_reg + "</td>");
 			row.append("<td>" + (data[i].prestamo_estado == 'E' ? "Entregado" : "Pendiente") + "</td>");
-			row.append(`<td><a>Recibir</a><a>Eliminar</a></td>`);
+			row.append(`<td><a onclick="recibir('`+data[i].prestamo_cod+`')">Recibir</a></td>`);
             row.append("</tr>");
             $('#listaPrestamos').append(row);
 		});
@@ -81,6 +81,26 @@ function generarPrestamo(){
 	} else {
 		alert("Algo anda mal con los datos del cliente, vuelve a seleccionarlo y intentalo de nuevo")
 	}
+}
+
+function recibir(cod){
+	var jsond = '{"id" : "'+cod+'"}';
+	$.ajax({
+		url:URL4,
+		type: "PUT",
+		timeout: 100000,
+		dataType: "json",
+		data: jsond
+	}).done(function(data){
+		alert(data.Mensaje);
+		console.log(data);
+		defaultScreen();
+	}).fail(function(jqXHR, textStatus, errorThrown){
+		console.log("Error al crear el prestamo");
+		console.log(errorThrown);
+	}).always(function(){
+		document.getElementById("prestamo").disabled = false;
+	});
 }
 
 function defaultScreen(){

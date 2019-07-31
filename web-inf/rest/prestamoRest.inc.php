@@ -19,10 +19,7 @@ class prestamoREST {
                 $rs = $dao->agregar(json_decode(file_get_contents("php://input")));
                 break;
             case 'PUT':
-                $rs = array(
-                    "Metodo" => $metodo,
-                    "Mensaje" => "En construccion editar..."
-                    );
+                $rs = $dao->editar(json_decode(file_get_contents("php://input")));
                 break;
             case 'DELETE':
                 $rs = array(
